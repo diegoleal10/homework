@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features>
+  <feature name="fuse-usecase" version="${version}">
+    <feature version="${camel.version}">camel</feature>-
+    <bundle>mvn:${groupId}/routing/${version}</bundle>
+  </feature>
+</features>

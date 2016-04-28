@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="usecases" xmlns="http://karaf.apache.org/xmlns/features/v1.2.0">
+    <!-- Include your bundles, features, config or configFile -->
+    <feature name="usecase-camel-aggregation-db" version="1.0">
+    </feature>
+
+    <feature name="h2" version="1.4.190">
+        <bundle>mvn:com.h2database/h2/1.4.190</bundle>
+    </feature>
+</features>
