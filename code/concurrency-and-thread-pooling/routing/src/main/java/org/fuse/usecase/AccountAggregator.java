@@ -19,12 +19,6 @@ public class AccountAggregator implements AggregationStrategy {
     @Override
     public Exchange aggregate(Exchange oldExchange, Exchange newExchange) {
 
-        if (oldExchange == null) {
-
-            return newExchange;
-        }
-
-        return oldExchange;
     }
-
+    
 }

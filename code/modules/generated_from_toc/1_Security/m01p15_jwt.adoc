@@ -1,0 +1,17 @@
+
+== JWT
+
+
+* JSon Web Token
+
+.References
+- https://jwt.io/
+
+ifdef::showscript[]
+[.notes]
+****
+
+== TITLE
+
+****
+endif::showscript[]

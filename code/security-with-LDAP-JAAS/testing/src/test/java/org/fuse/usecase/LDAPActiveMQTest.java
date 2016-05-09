@@ -27,8 +27,7 @@ import static org.junit.Assert.fail;
     public BrokerService broker;
     public static LdapServer ldapServer;
 
-    @Before
-    public void setup() throws Exception {
+    @Before public void setup() throws Exception {
         System.setProperty("ldapPort", String.valueOf(getLdapServer().getPort()));
         broker = BrokerFactory.createBroker("xbean:org/fuse/usecase/activemq-broker.xml");
         broker.start();
@@ -41,15 +40,50 @@ import static org.junit.Assert.fail;
     }
 
     @Test public void testFailCreateSessionNotEnoughRight() throws Exception {
-
+        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("vm://localhost");
+        try {
+            Connection conn = factory.createQueueConnection("cibsen", "camel");
+            Session sess = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            conn.start();
+            fail("Expected Exception");
+        } catch (Exception e) {
+            assertEquals("User name [cibsen] or password is invalid.", e.getMessage());
+            return;
+        }
     }
 
     @Test public void testCreateQueuePublishConsume() throws Exception {
+        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("vm://localhost");
 
+        Connection conn = factory.createQueueConnection("jdoe", "sunflower");
+        Session sess = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        conn.start();
+        Queue queue = sess.createQueue("usecase-input");
+
+        MessageProducer producer = sess.createProducer(queue);
+        MessageConsumer consumer = sess.createConsumer(queue);
+
+        producer.send(sess.createTextMessage("test"));
+        Message msg = consumer.receive(1000);
+        assertNotNull(msg);
+        conn.stop();
+        sess.close();
     }
 
     @Test public void testFailCreateQueuePublishConsume() throws Exception {
+        ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("vm://localhost");
+        try {
+            Connection conn = factory.createQueueConnection("jdoe", "sunflower");
+            Session sess = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            conn.start();
+            Queue queue = sess.createQueue("TEST.FOOOO");
 
+            MessageProducer producer = sess.createProducer(queue);
+            fail("Expected JMSException");
+        } catch (Exception e) {
+            assertEquals("User jdoe is not authorized to write to: queue://TEST.FOOOO", e.getMessage());
+            return;
+        }
     }
 
 }

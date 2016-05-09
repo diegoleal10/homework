@@ -14,17 +14,16 @@
             <policyMap>
                 <policyEntries>
                     <policyEntry queue=">">
+
                     </policyEntry>
                 </policyEntries>
             </policyMap>
         </destinationPolicy>
 
         <plugins>
-
         </plugins>
 
         <transportConnectors>
-            <transportConnector name="tcp" uri="tcp://localhost:61616"/>
         </transportConnectors>
     </broker>
 </beans>

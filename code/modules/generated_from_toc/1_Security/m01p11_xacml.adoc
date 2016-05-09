@@ -1,0 +1,19 @@
+
+== XACML
+
+
+* Principe
+* Picketlink & Keycloak
+* CXF implementation with OpenAz
+
+.References
+- http://coheigea.blogspot.be/2015/09/authorization-for-web-services-using.html
+
+ifdef::showscript[]
+[.notes]
+****
+
+== TITLE
+
+****
+endif::showscript[]

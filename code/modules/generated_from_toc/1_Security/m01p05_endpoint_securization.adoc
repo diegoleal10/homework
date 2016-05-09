@@ -1,0 +1,17 @@
+
+== Endpoint securization
+
+
+* SSL/TLS with Basic Authentication
+
+.References
+* http://www.eaipatterns.com/Messaging.html
+
+ifdef::showscript[]
+[.notes]
+****
+
+== TITLE
+
+****
+endif::showscript[]

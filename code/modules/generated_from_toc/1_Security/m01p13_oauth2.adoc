@@ -1,0 +1,22 @@
+
+== Oauth2
+
+
+* Support for non-browser based applications.
+* OAuth 2.0 no longer requires client applications to have cryptography.
+* OAuth 2.0 signatures are much less complicated.
+* OAuth 2.0 Access tokens are "short-lived".
+* OAuth 2.0 is meant to have a clean separation of roles between the server responsible for handling OAuth requests and the server handling user authorization
+
+.References
+- http://stackoverflow.com/questions/4113934/how-is-oauth-2-different-from-oauth-1
+- https://aaronparecki.com/2012/07/29/2/oauth2-simplified
+
+ifdef::showscript[]
+[.notes]
+****
+
+== TITLE
+
+****
+endif::showscript[]

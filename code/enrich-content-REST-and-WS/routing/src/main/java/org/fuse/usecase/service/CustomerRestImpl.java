@@ -13,12 +13,20 @@ public class CustomerRestImpl implements CustomerRest {
     private static final String WE_REGION = "WEST_AMERICA";
     private static final String EAST_REGION = "EAST_AMERICA";
 
-    @Override
-    public Account enrich(Account account) {
+    @Override public Account enrich(Account account) {
         Company company = account.getCompany();
         String region = company.getGeo();
-
-
+        switch (region) {
+        case "NA":
+            company.setGeo(NA_REGION); break;
+        case "SA":
+            company.setGeo(SA_REGION); break;
+        case "WA":
+            company.setGeo(WE_REGION); break;
+        case "EA":
+            company.setGeo(EAST_REGION); break;
+        }
+        account.setCompany(company);
         return account;
     }
 }

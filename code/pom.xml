@@ -16,6 +16,7 @@
         <module>usecase-3</module>
         <module>usecase-4</module>
         <module>usecase-5</module>
+        <module>usecase-6</module>
     </modules>
 
 </project>

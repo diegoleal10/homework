@@ -1,0 +1,18 @@
+
+== SAML2
+
+
+* Principe
+
+.References
+- https://en.wikipedia.org/wiki/SAML_2.0
+- http://saml.xml.org/differences-between-saml-2-0-and-1-1
+
+ifdef::showscript[]
+[.notes]
+****
+
+== TITLE
+
+****
+endif::showscript[]

@@ -8,9 +8,7 @@ import javax.ws.rs.*;
 @Path("/customerservice/")
 public interface CustomerRest {
 
-    @POST
-    @Path("/enrich")
-    @Consumes("application/json")
+    @POST @Path("/enrich") @Consumes("application/json")
     Account enrich(Account customer);
 
 }

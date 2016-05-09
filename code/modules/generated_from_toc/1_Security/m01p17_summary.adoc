@@ -1,0 +1,21 @@
+
+== Summary
+
+This module introduced you to the following topics:
+
+** Item 1
+** Item 2
+** Item 3
+
+ifdef::showscript[]
+[.notes]
+****
+
+== Summary
+
+This module addressed questions about ...
+
+****
+endif::showscript[]
+
+

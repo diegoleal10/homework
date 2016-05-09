@@ -1,0 +1,18 @@
+
+== Module Topics
+
+By completing this module you will learn about the following topics:
+
+  * Item 1
+  * Item 2
+
+ifdef::showscript[]
+[.notes]
+****
+
+== Module Topics
+
+* This module introduces ...
+
+****
+endif::showscript[]

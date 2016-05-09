@@ -1,0 +1,8 @@
+
+== Externalize Security endpoint enforcement
+
+
+* Apiman & Keycloak
+
+.References
+- http://apiman.io

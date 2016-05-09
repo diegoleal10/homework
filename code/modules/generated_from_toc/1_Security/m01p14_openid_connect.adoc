@@ -1,0 +1,15 @@
+
+== OpenId Connect
+
+
+.References
+- http://openid.net/connect/
+
+ifdef::showscript[]
+[.notes]
+****
+
+== TITLE
+
+****
+endif::showscript[]

@@ -94,14 +94,97 @@ ou: Queue
 ## usecase-input ##
 ###################
 
+dn: cn=usecase-input,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
+cn: usecase-input
+description: A queue
+objectClass: applicationProcess
+objectClass: top
+
+dn: cn=admin,cn=usecase-input,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
+cn: admin
+description: Admin privilege group, members are roles
+member: cn=admins
+member: cn=users
+objectClass: groupOfNames
+objectClass: top
+
+dn: cn=read,cn=usecase-input,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
+cn: read
+member: cn=users
+member: cn=admins
+objectClass: groupOfNames
+objectClass: top
+
+dn: cn=write,cn=usecase-input,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
+cn: write
+objectClass: groupOfNames
+objectClass: top
+member: cn=users
+member: cn=admins
+
 ####################
 ## usecase-output ##
 ####################
+
+dn: cn=usecase-output,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
+cn: usecase-output
+description: A queue
+objectClass: applicationProcess
+objectClass: top
+
+dn: cn=admin,cn=usecase-output,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
+cn: admin
+description: Admin privilege group, members are roles
+member: cn=admins
+member: cn=users
+objectClass: groupOfNames
+objectClass: top
+
+dn: cn=read,cn=usecase-output,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
+cn: read
+member: cn=users
+member: cn=admins
+objectClass: groupOfNames
+objectClass: top
+
+dn: cn=write,cn=usecase-output,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
+cn: write
+objectClass: groupOfNames
+objectClass: top
+member: cn=users
+member: cn=admins
 
 ###################
 ## usecase-error ##
 ###################
 
+dn: cn=usecase-error,ou=Topic,ou=Destination,ou=ActiveMQ,ou=system
+cn: usecase-error
+description: A Usecase ErrorTopic
+objectClass: applicationProcess
+objectClass: top
+
+dn: cn=admin,cn=usecase-error,ou=Topic,ou=Destination,ou=ActiveMQ,ou=system
+cn: admin
+description: Admin privilege group, members are roles
+member: cn=admins
+member: cn=users
+objectClass: groupOfNames
+objectClass: top
+
+dn: cn=read,cn=usecase-error,ou=Topic,ou=Destination,ou=ActiveMQ,ou=system
+cn: read
+member: cn=users
+member: cn=admins
+objectClass: groupOfNames
+objectClass: top
+
+dn: cn=write,cn=usecase-error,ou=Topic,ou=Destination,ou=ActiveMQ,ou=system
+cn: write
+objectClass: groupOfNames
+objectClass: top
+member: cn=users
+member: cn=admins
 
 #######################
 ## Define advisories ##

@@ -21,10 +21,14 @@ public class ProcessorBean {
     public void convertEntityToString(Exchange exchange) throws IOException {
         int c;
         StringBuffer buf = new StringBuffer();
-        String response = null;
-
-
-
+        Message msg = exchange.getIn();
+        ResponseImpl resp = (ResponseImpl)msg.getBody();
+        InputStream stream = (InputStream) resp.getEntity();
+        while ((c = stream.read()) != -1) {
+            buf.append((char) c);
+        }
+        stream.close();
+        String response = buf.toString();
         exchange.getIn().setBody(response);
     }
 

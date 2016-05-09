@@ -1,0 +1,15 @@
+
+== Policy based
+
+
+* CXF Interceptor
+* Camel Policy
+
+ifdef::showscript[]
+[.notes]
+****
+
+== TITLE
+
+****
+endif::showscript[]

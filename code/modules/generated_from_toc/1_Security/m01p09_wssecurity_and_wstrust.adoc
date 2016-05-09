@@ -1,0 +1,20 @@
+
+== WS-Security and WS-Trust
+
+
+1. WS-Security
+2. Extension - STS
+
+.References
+- https://en.wikipedia.org/wiki/SAML_2.0
+- https://en.wikipedia.org/wiki/WS-Trust
+- http://cxf.apache.org/docs/ws-trust.html
+
+ifdef::showscript[]
+[.notes]
+****
+
+== TITLE
+
+****
+endif::showscript[]

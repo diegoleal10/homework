@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>features</artifactId>
-    <name>Fuse :: Use Case 5 :: Features</name>
+    <name>Fuse :: Use Case 4 :: Features</name>
 
     <packaging>pom</packaging>
 

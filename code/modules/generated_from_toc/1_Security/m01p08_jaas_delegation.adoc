@@ -1,0 +1,17 @@
+
+== JAAS Delegation
+
+
+* JBoss Fuse & Karaf implmentation
+* RBAC - Role Base Access List
+* LDAP, JDBC
+* Secure your application
+
+ifdef::showscript[]
+[.notes]
+****
+
+== TITLE
+
+****
+endif::showscript[]

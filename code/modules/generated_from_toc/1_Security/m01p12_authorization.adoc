@@ -1,0 +1,15 @@
+
+== Authorization
+
+
+* Introduction about Authorization principe
+* Specs available
+
+ifdef::showscript[]
+[.notes]
+****
+
+== TITLE
+
+****
+endif::showscript[]

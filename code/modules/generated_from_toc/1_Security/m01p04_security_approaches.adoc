@@ -1,0 +1,17 @@
+
+== Security approaches
+
+
+* Secure endpoint
+* Encrypt/decrypt payload
+* Policy based
+* Externalize
+
+ifdef::showscript[]
+[.notes]
+****
+
+== TITLE
+
+****
+endif::showscript[]

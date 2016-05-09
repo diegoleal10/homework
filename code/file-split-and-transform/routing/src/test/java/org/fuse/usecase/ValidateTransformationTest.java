@@ -20,31 +20,21 @@ import java.io.IOException;
 
 public class ValidateTransformationTest extends CamelSpringTestSupport {
 
+    @EndpointInject(uri = "mock:csv2json-test-output") private MockEndpoint resultEndpoint;
 
-    @Test
-    public void transform() throws Exception {
-        // setup expectations
+    @Produce(uri = "direct:csv2json-test-input") private ProducerTemplate startEndpoint;
 
-        // set expected body as the unpretty print version of the json
-        // (flattened)
-
-        // run test
-
-
-        // verify results
-
+    @Test public void transform() throws Exception {
     }
 
-    @Override
-    protected RouteBuilder createRouteBuilder() throws Exception {
+    @Override protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() throws Exception {
             }
         };
     }
 
-    @Override
-    protected AbstractXmlApplicationContext createApplicationContext() {
+    @Override protected AbstractXmlApplicationContext createApplicationContext() {
         return new ClassPathXmlApplicationContext("META-INF/spring/camel-context.xml");
     }
 

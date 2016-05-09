@@ -1,0 +1,8 @@
+attributes:
+   github-repo: https://github.com/gpe-mw-training/advanced-labs/archive
+   exercise-source-zip: v0.1-exercise.zip
+   solution-source-zip: v0.1-solution.zip
+
+   # Resources & code source
+   resourcesdir: ../snippets/src/main/resources
+   sourcesdir: ../snippets/src/main/java

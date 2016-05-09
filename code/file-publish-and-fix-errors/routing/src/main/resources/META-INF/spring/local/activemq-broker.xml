@@ -15,14 +15,12 @@
             <policyMap>
                 <policyEntries>
                     <policyEntry queue=">">
-
                     </policyEntry>
                 </policyEntries>
             </policyMap>
         </destinationPolicy>
 
         <plugins>
-
         </plugins>
 
         <transportConnectors>
