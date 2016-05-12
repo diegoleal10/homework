@@ -14,38 +14,5 @@
 
         <propertyPlaceholder id="properties" location="fabric8/route.properties"/>
 
-	<!-- EXCLUDE-BEGIN -→
-        <!--
-             Transformation Endpoint doing csv2java conversion
-             Step 1 : csv record is converted java using camel bindy
-             Step 2 : Dozer transformation of Customer to Account
-             Step 3 : Java to Json conversion using json jackson
-        -->
-        <endpoint uri="dozer:csv2json?sourceModel=org.acme.Customer&amp;targetModel=org.globex.Account&amp;marshalId=json&amp;unmarshalId=csv&amp;mappingFile=transformation.xml" id="csv2json" />
-
-        <!-- CSV Input & JSon OutPut DataFormat -->
-        <dataFormats>
-            <bindy id="csv" type="Csv" classType="org.acme.Customer" />
-            <json id="json" library="Jackson"/>
-        </dataFormats>
-
-        <!-- Route Definition -->
-        <route>
-            <!-- Consume files from input directory -->
-            <from uri="file:{{fileInput}}?fileName=customers.csv&amp;noop=true" />
-            <onException>
-                <exception>java.lang.IllegalArgumentException</exception>
-                <handled>
-                    <constant>true</constant>
-                </handled>
-                <to uri="file:{{fileError}}?fileName=csv-record-${date:now:yyyyMMdd}.txt"/>
-            </onException>
-            <split>
-                <tokenize token="\n" />
-                <to ref="csv2json"/>
-                <to uri="file:{{fileOutput}}?fileName=account-${property.CamelSplitIndex}.json" />
-            </split>
-        </route>
-	<!-- EXCLUDE-END -→
     </camelContext>
 </beans>
