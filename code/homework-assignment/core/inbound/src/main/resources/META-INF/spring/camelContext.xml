@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	       xmlns:context="http://www.springframework.org/schema/context"
+	
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+     http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd 
+                 http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd 
+                 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	 <osgi:reference id="activeMq" interface="org.apache.camel.Component"/> 
+	
+	<bean id="demographicImpl" class="com.redhat.usecase.service.impl.DEIMServiceImpl" />
+	<jaxrs:server id="demoGraphicsService" address="http://localhost:9098/cxf/demos">
+		<jaxrs:serviceBeans>
+			<ref bean="demographicImpl" />
+		</jaxrs:serviceBeans>
+	</jaxrs:server>
+
+	<camel:camelContext id="restInbound" trace="false" >
+	                           
+		<camel:dataFormats>
+			<camel:jaxb id="personDataFormat" contextPath="com.customer.app"
+				partClass="com.customer.app.Person" />
+		</camel:dataFormats>
+		<camel:route id="handleRest">
+			<camel:from uri="direct:integrateRoute"></camel:from>
+			<camel:log message="\n\n\n\n ${in.header.METHOD}"></camel:log>
+			<camel:recipientList>
+				<camel:simple>direct:${in.header.METHOD}</camel:simple>
+			</camel:recipientList>
+		</camel:route>
+		<camel:route id="addRoute">
+			<camel:from uri="direct:add"></camel:from>
+			<camel:marshal ref="personDataFormat">
+			</camel:marshal>
+			<camel:log message="the Body recieved is : ${body}" />
+			<camel:inOnly uri="activeMq:queue:customer" />
+			<camel:transform>
+				<camel:constant>DONE</camel:constant>
+			</camel:transform>
+		</camel:route>
+	</camel:camelContext>
+	
+</beans>

@@ -1,0 +1,1 @@
+Contains the Tooling, Custom plugins and Jars necessary to launch, manage and/or instrument the application.

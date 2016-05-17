@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:osgi="http://www.springframework.org/schema/osgi"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd 
+       http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd 
+               http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+
+	<bean id="demographicImpl" class="com.redhat.usecase.service.impl.DEIMServiceImpl" />
+	<jaxrs:server id="demoGraphicsService" address="http://localhost:9098/cxf/demos">
+		<jaxrs:serviceBeans>
+			<ref bean="demographicImpl" />
+		</jaxrs:serviceBeans>
+	</jaxrs:server>
+	
+	
+
+	<camelContext xmlns="http://camel.apache.org/schema/spring" id="restInboundTest" trace="true">
+		<camel:dataFormats>
+			<camel:jaxb id="personDataFormat" contextPath="com.customer.app"
+				partClass="com.customer.app.Person" />
+		</camel:dataFormats>
+		<route id="handleRest">
+		</route>
+		<route id="addRoute">
+		</route>
+	</camelContext>
+
+</beans>

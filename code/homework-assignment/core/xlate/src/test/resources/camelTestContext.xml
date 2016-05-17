@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd 
+               http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+
+
+
+	<bean id="activeMq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+		<property name="connectionFactory">
+			<bean class="org.apache.activemq.spring.ActiveMQConnectionFactory">
+				<property name="brokerURL"
+					value="vm://soapbroker?broker.persistent=false&amp;broker.useJmx=false" />
+			</bean>
+		</property>
+	</bean>
+	
+
+	<bean id="routeBuilder" class="com.redhat.customer.translate.RouteBuilderXlate" />
+
+
+	<camelContext xmlns="http://camel.apache.org/schema/spring"
+		trace="false" typeConverterStatisticsEnabled="true">
+		<camel:routeBuilder ref="routeBuilder" />
+	</camelContext>
+
+</beans>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd 
+                      http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd">
+
+	<amq:broker brokerName="
+	testBroker " start="true" id="broker">
+		<amq:transportConnectors>
+			<amq:transportConnector uri="vm://localhost" />
+		</amq:transportConnectors>
+	</amq:broker>
+
+	<bean id="activeMq" class="org.apache.activemq.camel.component.ActiveMQComponent"
+		depends-on="broker">
+		<property name="brokerURL" value="vm://localhost" />
+	</bean>
+
+	<camelContext xmlns="http://camel.apache.org/schema/spring" id="outBound" trace="false">
+	</camelContext>
+
+</beans>

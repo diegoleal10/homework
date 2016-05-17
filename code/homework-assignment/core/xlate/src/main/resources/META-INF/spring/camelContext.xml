@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd 
+              http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+	<bean id="serviceStrategy"
+		class="org.apache.camel.dataformat.soap.name.ServiceInterfaceStrategy">
+		<constructor-arg value="com.sun.mdm.index.webservice.PersonEJB" />
+		<constructor-arg value="true" />
+	</bean>
+	<osgi:reference id="activeMq" interface="org.apache.camel.Component" />
+
+	<bean id="routeBuilder" class="com.redhat.customer.translate.RouteBuilderXlate" />
+	<camelContext xmlns="http://camel.apache.org/schema/spring"
+		trace="false" typeConverterStatisticsEnabled="true">
+		<camel:dataFormats>
+			<camel:soapjaxb contextPath="com.sun.mdm.index.webservice"
+				id="soapJax" elementNameStrategyRef="serviceStrategy" />
+			<camel:jaxb id="personMarshaller" contextPath="com.customer.app"
+				partClass="com.customer.app.Person" />
+		</camel:dataFormats>
+		<route id="translate">
+		</route>
+	</camelContext>
+</beans>
