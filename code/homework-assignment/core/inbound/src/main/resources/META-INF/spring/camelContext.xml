@@ -26,21 +26,8 @@
 				partClass="com.customer.app.Person" />
 		</camel:dataFormats>
 		<camel:route id="handleRest">
-			<camel:from uri="direct:integrateRoute"></camel:from>
-			<camel:log message="\n\n\n\n ${in.header.METHOD}"></camel:log>
-			<camel:recipientList>
-				<camel:simple>direct:${in.header.METHOD}</camel:simple>
-			</camel:recipientList>
 		</camel:route>
 		<camel:route id="addRoute">
-			<camel:from uri="direct:add"></camel:from>
-			<camel:marshal ref="personDataFormat">
-			</camel:marshal>
-			<camel:log message="the Body recieved is : ${body}" />
-			<camel:inOnly uri="activeMq:queue:customer" />
-			<camel:transform>
-				<camel:constant>DONE</camel:constant>
-			</camel:transform>
 		</camel:route>
 	</camel:camelContext>
 	

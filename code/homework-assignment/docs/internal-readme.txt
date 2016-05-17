@@ -20,7 +20,7 @@ log4j.logger.org.springframework=INFO
 
 This project depends on the local artifact osgi:install mvn:com.customer.app/artifacts/1.0-SNAPSHOT  (compile the core project to get this jar)
 
-Once you have fuse up and running ( no fabric ), run the following commands in the console::
+% bin/karaf
 
 >osgi:install mvn:com.customer.app/integration-test-server/1.0-SNAPSHOT
 >osgi:install mvn:com.customer.app/artifacts/1.0-SNAPSHOT
