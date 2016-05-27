@@ -94,37 +94,6 @@ ou: Queue
 ## usecase-input ##
 ###################
 
-# EXCLUDE-BEGIN
-
-dn: cn=usecase-input,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
-cn: usecase-input
-description: A queue
-objectClass: applicationProcess
-objectClass: top
-
-dn: cn=admin,cn=usecase-input,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
-cn: admin
-description: Admin privilege group, members are roles
-member: cn=admins
-member: cn=users
-objectClass: groupOfNames
-objectClass: top
-
-dn: cn=read,cn=usecase-input,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
-cn: read
-member: cn=users
-member: cn=admins
-objectClass: groupOfNames
-objectClass: top
-
-dn: cn=write,cn=usecase-input,ou=Queue,ou=Destination,ou=ActiveMQ,ou=system
-cn: write
-objectClass: groupOfNames
-objectClass: top
-member: cn=users
-member: cn=admins
-
-#EXCLUDE-END
 
 ####################
 ## usecase-output ##
