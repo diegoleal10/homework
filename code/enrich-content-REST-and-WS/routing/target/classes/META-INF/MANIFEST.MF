@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1464728588766
+Build-Jdk: 1.7.0_101
+Built-By: jenkins
+Bundle-ManifestVersion: 2
+Bundle-Name: Fuse :: Use Case 2 :: Routing
+Bundle-SymbolicName: routing
+Bundle-Version: 1.0.0
+Created-By: Apache Maven Bundle Plugin
+Export-Package: org.acme;uses:="org.apache.camel.dataformat.bindy.annota
+ tion";version="1.0.0",org.globex;uses:="javax.xml.bind.annotation";vers
+ ion="1.0.0"
+Import-Package: com.fasterxml.jackson.jaxrs.json;version="[2.4,3)",javax
+ .jws,javax.jws.soap,javax.ws.rs;version="[2.0,3)",javax.xml.bind.annota
+ tion,org.apache.camel;version="[2.0,3.0)",org.apache.camel.builder;vers
+ ion="[2.0,3.0)",org.apache.camel.component.dozer;version="[2.0,3.0)",or
+ g.apache.camel.component.sql;version="[2.15,3)",org.apache.camel.datafo
+ rmat.bindy.annotation;version="[2.15,3)",org.apache.camel.impl;version=
+ "[2.0,3.0)",org.apache.camel.model;version="[2.0,3.0)",org.apache.camel
+ .processor.aggregate;version="[2.15,3)",org.apache.camel.spi;version="[
+ 2.0,3.0)",org.apache.cxf.jaxrs.impl;version="[3.0,4)",org.globex,org.h2
+ ;version="[1.4,2)",org.springframework.jdbc.datasource
+Tool: Bnd-1.50.0

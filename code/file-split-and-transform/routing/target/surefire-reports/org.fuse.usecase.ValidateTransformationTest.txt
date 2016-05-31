@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.fuse.usecase.ValidateTransformationTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.018 sec - in org.fuse.usecase.ValidateTransformationTest
