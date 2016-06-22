@@ -97,6 +97,8 @@ public class CamelContextXmlTest extends CamelSpringTestSupport {
 	public static String replaceOSGiPropertyLoader(String springXmlLocation)
 			throws ParserConfigurationException, IOException, SAXException,
 			XPathExpressionException, TransformerException {
+		StringWriter writer = new StringWriter();
+		return writer.toString();
 	}
 
 }

@@ -30,6 +30,8 @@ public class DEIMServiceImpl implements DEIMService {
 	@Path("/add")
 	@Consumes(MediaType.APPLICATION_XML)
 	public Response addPerson(Person person) {
+		ResponseBuilderImpl builder = new ResponseBuilderImpl();
+		return builder.build();
 	}
 
 }

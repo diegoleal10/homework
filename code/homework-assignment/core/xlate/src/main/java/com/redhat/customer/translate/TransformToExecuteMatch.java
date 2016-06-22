@@ -16,6 +16,8 @@ public class TransformToExecuteMatch {
 @Converter
 public ExecuteMatchUpdate convertTo(Object value,Exchange e)
 			throws TypeConversionException {
+		ExecuteMatchUpdate executeMatchUpdate = new ExecuteMatchUpdate();
+		return executeMatchUpdate;
 	}
 
 }

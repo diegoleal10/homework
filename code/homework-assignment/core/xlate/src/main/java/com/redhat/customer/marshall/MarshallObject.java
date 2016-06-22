@@ -12,5 +12,7 @@ import com.sun.mdm.index.webservice.ExecuteMatchUpdate;
 public class MarshallObject {
 
 	public String marshalElement(ExecuteMatchUpdate person) {
+		String result=null;
+		return result;
 	}
 }
