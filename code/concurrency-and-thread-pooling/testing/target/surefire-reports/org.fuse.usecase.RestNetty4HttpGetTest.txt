@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: org.fuse.usecase.RestNetty4HttpGetTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.12 sec - in org.fuse.usecase.RestNetty4HttpGetTest
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.165 sec - in org.fuse.usecase.RestNetty4HttpGetTest
