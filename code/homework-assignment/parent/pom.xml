@@ -34,6 +34,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <jboss.fuse.bom.version>6.2.1.redhat-084</jboss.fuse.bom.version>
+        <camel.version>2.15.1.redhat-621084</camel.version>
         <jcl.slf4j.version>1.7.6</jcl.slf4j.version>
         <lifecycle.mapping.plugin.version>1.0.0</lifecycle.mapping.plugin.version>
         <log4j.version>1.2.17</log4j.version>
@@ -385,18 +386,85 @@
         </profile>
     </profiles>
     
-  <!--scm>
-    <connection>scm:svn:http://....</connection>
-    <developerConnection>scm:svn:https://....</developerConnection>
-    <url>https://....</url>
-  </scm>
+    <repositories>
+        <repository>
+          <id>jboss-ga-repository</id>
+          <url>http://maven.repository.redhat.com/techpreview/all</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+        <repository>
+          <id>jboss-public-repository</id>
+          <url>http://repository.jboss.org/nexus/content/repositories/public/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+        <repository>
+          <id>fuse-repository</id>
+          <url>http://repo.fusesource.com/nexus/content/groups/public/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      <repository>
+          <id>fusesource</id>
+          <url>http://repo.fusesource.com/maven2</url>
+          <snapshots>
+             <enabled>false</enabled>
+          <updatePolicy>daily</updatePolicy>
+          </snapshots>
+          <releases>
+             <enabled>true</enabled>
+          <updatePolicy>daily</updatePolicy>
+          </releases>
+        </repository>
+    </repositories>
 
-  <distributionManagement>
-    <repository>
-      <id>...</id>
-      <name>...</name>
-      <url>scm:svn:https://...</url>
-    </repository>
-  </distributionManagement-->
+    <pluginRepositories>
+        <pluginRepository>
+          <id>jboss-ga-plugin-repository</id>
+          <url>http://maven.repository.redhat.com/techpreview/all</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+          <id>jboss-public-plugin-repository</id>
+          <url>http://repository.jboss.org/nexus/content/repositories/public/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </pluginRepository>
+	<pluginRepository>
+          <id>fusesource</id>
+          <name>jboss-fusesource</name>
+          <url>http://repo.fusesource.com/maven2</url>
+          <releases>
+            <enabled>true</enabled>
+            <updatePolicy>daily</updatePolicy>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+            <updatePolicy>daily</updatePolicy>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
 
 </project>
