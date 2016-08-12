@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://camel.apache.org/schema/spring
-       http://camel.apache.org/schema/spring/camel-spring.xsd">
-
-    <camelContext trace="false" xmlns="http://camel.apache.org/schema/spring">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring        http://camel.apache.org/schema/spring/camel-spring.xsd">
+    <camelContext id="camelContext-4c92490b-9018-4342-a1be-a900c78f9dec"
+        trace="false" xmlns="http://camel.apache.org/schema/spring">
         <propertyPlaceholder id="properties" location="fabric8/route.properties"/>
     </camelContext>
-
 </beans>

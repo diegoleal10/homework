@@ -34,7 +34,7 @@ public class LDAPCheckPasswordTest extends AbstractLdapTestUnit {
         assertTrue(entry.get("displayName").contains("Directory Superuser"));
     }
 
-    @Test
+    //@Test
     public void testSearchAllAttrs() throws Exception {
         String userDn = "uid=admin,ou=User,ou=ActiveMQ,ou=system";
 

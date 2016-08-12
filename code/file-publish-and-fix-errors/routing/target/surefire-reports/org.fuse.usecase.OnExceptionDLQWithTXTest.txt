@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: org.fuse.usecase.OnExceptionDLQWithTXTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.319 sec - in org.fuse.usecase.OnExceptionDLQWithTXTest

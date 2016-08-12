@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1469580880568
-Build-Jdk: 1.7.0_101
-Built-By: jenkins
+Bnd-LastModified: 1470418111918
+Build-Jdk: 1.8.0_91
+Built-By: dleal
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse :: Use Case 2 :: Routing
 Bundle-SymbolicName: routing

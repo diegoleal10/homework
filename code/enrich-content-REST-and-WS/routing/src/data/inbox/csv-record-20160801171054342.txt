@@ -1,0 +1,1 @@
+{"company":{"name":"CloudyCloud","geo":"EA","active":true},"contact":{"firstName":"Fred","lastName":"Quicksand","streetAddr":"202 Barney Blvd.","city":"Rock City","state":"MI","zip":"19728","phone":"313-555-1234"}}

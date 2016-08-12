@@ -1,38 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://camel.apache.org/schema/spring
-       http://camel.apache.org/schema/spring/camel-spring.xsd">
-
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring        http://camel.apache.org/schema/spring/camel-spring.xsd">
     <!-- H2 DB -->
-    <bean id="usecaseDB" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    </bean>
-
+    <bean
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="usecaseDB"/>
     <!-- SQL Component & Datasource -->
-    <bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
-    </bean>
-
+    <bean class="org.apache.camel.component.sql.SqlComponent" id="sql"/>
     <!-- Spring JMS TxManager -->
-    <bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
-    </bean>
-
+    <bean
+        class="org.springframework.jms.connection.JmsTransactionManager" id="jmsTransactionManager"/>
     <!-- JMS ConnectionFactory  -->
-    <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-    </bean>
-
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory" id="jmsConnectionFactory"/>
     <!-- ActiveMQ Camel Component - Tx -->
-    <bean id="amq-tx" class="org.apache.activemq.camel.component.ActiveMQComponent">
-    </bean>
-
+    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="amq-tx"/>
     <!-- ActiveMQ Camel Component - No Tx -->
-    <bean id="amq-notx" class="org.apache.activemq.camel.component.ActiveMQComponent">
-    </bean>
-
-    <camelContext trace="false" xmlns="http://camel.apache.org/schema/spring">
-
+    <bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="amq-notx"/>
+    <camelContext id="camelContext-3823d2ad-ca75-420a-bff9-2642c8543158"
+        trace="false" xmlns="http://camel.apache.org/schema/spring">
         <propertyPlaceholder id="properties" location="fabric8/route.properties"/>
     </camelContext>
 </beans>

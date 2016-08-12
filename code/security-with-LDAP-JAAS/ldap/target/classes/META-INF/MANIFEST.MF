@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1469580963850
-Build-Jdk: 1.7.0_101
-Built-By: jenkins
+Bnd-LastModified: 1470418116627
+Build-Jdk: 1.8.0_91
+Built-By: dleal
 Bundle-ClassPath: .,apacheds-all-2.0.0-M6.jar
 Bundle-ManifestVersion: 2
 Bundle-Name: Fuse :: Use Case 4 :: LDAP Server & JAAS Module
@@ -13,11 +13,11 @@ Embed-Transitive: true
 Embedded-Artifacts: apacheds-all-2.0.0-M6.jar;g="org.apache.directory.se
  rver";a="apacheds-all";v="2.0.0-M6"
 Export-Package: org.fuse.usecase.ldap;uses:="org.slf4j";version="1.0.0"
-Ignore-Package: org.hibernate.cache.access,org.hibernate.cfg,org.junit.r
- unner.notification,org.junit,junit.textui,junit.framework,org.hibernate
- ,org.junit.runner,org.junit.runners,org.hibernate.impl,org.hibernate.tr
- ansaction,org.hibernate.cache,org.junit.runners.model,org.hibernate.sta
- t
+Ignore-Package: org.junit.runners,org.hibernate.transaction,org.junit.ru
+ nner.notification,org.hibernate,org.hibernate.cache,org.hibernate.impl,
+ org.junit.runners.model,junit.textui,org.hibernate.cfg,org.hibernate.st
+ at,org.hibernate.cache.access,org.junit.runner,org.junit,junit.framewor
+ k
 Import-Package: javax.crypto,javax.crypto.interfaces,javax.crypto.spec,j
  avax.management,javax.management.openmbean,javax.naming,javax.naming.di
  rectory,javax.naming.event,javax.naming.ldap,javax.naming.spi,javax.net
@@ -28,6 +28,6 @@ Import-Package: javax.crypto,javax.crypto.interfaces,javax.crypto.spec,j
  x.transaction.xa,javax.xml.parsers,org.apache.karaf.jaas.config,org.apa
  che.karaf.jaas.modules.ldap,org.ietf.jgss,org.osgi.framework,org.osgi.s
  ervice.blueprint;version="[1.0.0,2.0.0)",org.slf4j;version="[1.7,2)",or
- g.slf4j.impl;resolution:=optional;version="[1.7,2)",org.xml.sax,org.xml
+ g.slf4j.impl;version="[1.7,2)";resolution:=optional,org.xml.sax,org.xml
  .sax.helpers
 Tool: Bnd-1.50.0

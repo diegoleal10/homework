@@ -1,43 +1,104 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://camel.apache.org/schema/spring
-       http://camel.apache.org/schema/spring/camel-spring.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring        http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-    <!-- H2 DB -->
-    <bean id="usecaseDB" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.h2.Driver"/>
-        <property name="url" value="jdbc:h2:tcp://localhost/~/usecaseDB"/>
-        <property name="username" value="sa"/>
-        <property name="password" value=""/>
-    </bean>
+	<!-- H2 DB -->
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="usecaseDB">
+		<property name="driverClassName" value="org.h2.Driver"/>
+		<property name="url" value="jdbc:h2:tcp://localhost/~/usecaseDB"/>
+		<property name="username" value="sa"/>
+		<property name="password" value=""/>
+	</bean>
 
-    <!-- SQL Component & Datasource -->
-    <bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
-    </bean>
+	<!-- SQL Component & Datasource -->
+	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource" ref="usecaseDB"/>
+	</bean>
+	
+	<bean class="org.fuse.usecase.ProcessorBean" id="myProcessor"/>
 
-    <!-- Spring JMS TxManager -->
-    <bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
-    </bean>
+	<!-- Spring JMS TxManager -->
+	<bean class="org.springframework.jms.connection.JmsTransactionManager" id="jmsTransactionManager">
+		<property name="connectionFactory" ref="jmsConnectionFactory"/>
+	</bean>
 
-    <!-- JMS ConnectionFactory  -->
-    <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-    </bean>
+	<!-- JMS ConnectionFactory -->
+	<bean class="org.apache.activemq.ActiveMQConnectionFactory" id="jmsConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616"/>
+		<property name="userName" value="admin"/>
+		<property name="password" value="admin"/>
+		<property name="redeliveryPolicy">
+			<bean class="org.apache.activemq.RedeliveryPolicy">
+				<property name="maximumRedeliveries" value="0"/>
+			</bean>
+		</property>
+	</bean>
 
-    <!-- ActiveMQ Camel Component - Tx -->
-    <bean id="amq-tx" class="org.apache.activemq.camel.component.ActiveMQComponent">
-    </bean>
+	<!-- ActiveMQ Camel Component - Tx -->
+	<bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="amq-tx"/>
 
-    <!-- ActiveMQ Camel Component - No Tx -->
-    <bean id="amq-notx" class="org.apache.activemq.camel.component.ActiveMQComponent">
-    </bean>
+	<!-- ActiveMQ Camel Component - No Tx -->
+	<bean class="org.apache.activemq.camel.component.ActiveMQComponent" id="amq-notx"/>
 
-    <camelContext trace="false" xmlns="http://camel.apache.org/schema/spring">
+	<camelContext xmlns="http://camel.apache.org/schema/spring" id="camelContext-830f8c81-bbf2-4612-829e-9dfb538fd6f1" trace="false">
+		<propertyPlaceholder id="properties" location="fabric8/route.properties"/>
+		<endpoint id="csv2json" uri="dozer:csv2json?sourceModel=org.acme.Customer&amp;targetModel=org.globex.Account&amp;marshalId=json&amp;unmarshalId=csv&amp;mappingFile=transformation.xml"/>
+		<dataFormats>
+			<bindy classType="org.acme.Customer" id="csv" type="Csv"/>
+			<json id="json" library="Jackson"/>
+		</dataFormats>
+		<onException>
+            <exception>java.lang.IllegalArgumentException</exception>
+            <handled>
+                <constant>true</constant>
+            </handled>
+			<bean method="debug" ref="myProcessor"/>
+			<log message="Error row: ${body} - ${headers}"/>
+			<to uri="activemq:{{topicNotification}}"/>
+		</onException>
+		
+		<route id="_route1">
+			
+			<from id="_to1" uri="file:{{fileInput}}"/>
+         <split id="_split1">
+				<tokenize token="\n"/>
+				
+				<log id="_log1" message="Split messages: ${body}"/>
+				<to id="_to2" ref="csv2json"/>
+				<log id="_log2" message="After transformation: ${body}"/>
+            <to id="_to3" uri="activemq:{{queueOutput}}"/>
+			</split>
+		</route>
+		
+		<route id="_route2">
+			
+			<from id="_from1" uri="activemq:{{topicNotification}}"/>
+			<log id="_log3" message="Error in TOPIC: ${body} - ${headers}"/>
+			<bean id="_bean1" method="defineNamedParameters" ref="myProcessor"/>
+         <to id="_to4" uri="sql:{{sql.insert.error}}"/>
+		</route>
+		
+		<route id="_route3">
+			
+			<from id="_from2" uri="sql:{{sql.select.error}}?onConsume={{sql.update.error}}"/>
+         <log id="_log4" message="Lectura de BD para ERROR: ${body} - ${headers}"/>
+		</route>
+		
+		<route id="_route4">
+			
+			<from id="_from3" uri="sql:{{sql.select.fixed}}?onConsume={{sql.update.fixed}}"/>
+			<log id="_log5" message="Lectura de BD para FIXED: ${body} - ${headers}"/>
+         <to id="_to5" uri="activemq:{{queueInput}}"/>
+		</route>
+		
+		<route id="_route5">
+			
+			<from id="_from4" uri="activemq:{{queueInput}}"/>
+			<log id="_log6" message="before json: ${body}"/>
+			<bean id="_bean2" method="getMessage" ref="myProcessor"/>
+			<log id="_log7" message="after processor: ${body}"/>
+			<to id="_to6" ref="csv2json"/>
+ 			<log id="_log8" message="after json: ${body}"/>
+         <to id="_to7" uri="activemq:{{queueOutput}}"/>
+		</route>
 
-        <propertyPlaceholder id="properties" location="fabric8/route.properties"/>
-
-    </camelContext>
+	</camelContext>
 </beans>

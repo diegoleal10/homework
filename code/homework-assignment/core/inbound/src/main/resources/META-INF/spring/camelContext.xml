@@ -1,34 +1,72 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:camel="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:osgi="http://www.springframework.org/schema/osgi"
-	       xmlns:context="http://www.springframework.org/schema/context"
-	
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
-     http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd 
-                 http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd 
-                 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+<beans 	xmlns="http://www.springframework.org/schema/beans" xmlns:cxf="http://camel.apache.org/schema/cxf" 
+		xmlns:osgi="http://www.springframework.org/schema/osgi"
+		xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd       
+    						http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd       
+    						http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf-spring.xsd       
+    						http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+    						http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
 
-	 <osgi:reference id="activeMq" interface="org.apache.camel.Component"/> 
-	
-	<bean id="demographicImpl" class="com.redhat.usecase.service.impl.DEIMServiceImpl" />
-	<jaxrs:server id="demoGraphicsService" address="http://localhost:9098/cxf/demos">
-		<jaxrs:serviceBeans>
-			<ref bean="demographicImpl" />
-		</jaxrs:serviceBeans>
-	</jaxrs:server>
 
-	<camel:camelContext id="restInbound" trace="false" >
-	                           
-		<camel:dataFormats>
-			<camel:jaxb id="personDataFormat" contextPath="com.customer.app"
-				partClass="com.customer.app.Person" />
-		</camel:dataFormats>
-		<camel:route id="handleRest">
-		</camel:route>
-		<camel:route id="addRoute">
-		</camel:route>
-	</camel:camelContext>
-	
+	<bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+    </bean>
+
+    <bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://localhost:61616"/>
+    </bean>
+
+    <bean name="activemq" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="connectionFactory" ref="jmsConnectionFactory"/>
+        <property name="transactionManager" ref="jmsTransactionManager"/>
+        <property name="transacted" value="true"/>
+    </bean>
+
+	<bean id="deimImpl" class="com.redhat.usecase.service.impl.DEIMServiceImpl" />
+
+	<cxf:rsServer address="http://localhost:9191/rest" id="deimRestService" loggingFeatureEnabled="false"
+		serviceClass="com.redhat.usecase.service.impl.DEIMServiceImpl">
+		<cxf:serviceBeans>
+			<ref bean="deimImpl" />
+		</cxf:serviceBeans>
+	</cxf:rsServer>
+
+	<camelContext id="camelContext-0bc1a08a-77b7-4784-a8c7-16506ea049c0" trace="false" xmlns="http://camel.apache.org/schema/spring">
+
+		<dataFormats>
+			<jaxb contextPath="com.customer.app" id="personDataFormat" partClass="com.customer.app.Person"/>
+		</dataFormats>
+		<route id="handleRest">
+			<from uri="cxfrs://bean://deimRestService" />
+			<log message="Rest Service: ${body} - OperationName: ${header.operationName}" />
+			<choice>
+				<when>
+					<simple>${header.operationName} == 'searchPerson'</simple>
+					<bean ref="deimImpl" method="searchPerson" />
+				</when>
+				<when>
+					<simple>${header.operationName} == 'addPerson'</simple>
+					<bean ref="deimImpl" method="addPerson" />
+				</when>
+				<when>
+					<simple>${header.operationName} == 'updatePerson'</simple>
+					<bean ref="deimImpl" method="updatePerson" />
+				</when>
+			</choice>
+			<log message="Rest Service: ${body} - headers: ${headers}" />
+		</route>
+
+		<route id="addRoute">
+			<from uri="direct:enqueueMessage" />
+			<marshal ref="personDataFormat" />
+			<log message="Message received in integrateRoute... ${body}" />
+			<to uri="activemq:queue:q.empi.deim.in" />
+			<transform>
+				<constant>OK</constant>
+			</transform>
+			<log message="Message after enqueue ... ${body}" />
+		</route>
+
+	</camelContext>
 </beans>

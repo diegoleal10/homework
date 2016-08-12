@@ -66,7 +66,7 @@ public class OnExceptionDLQWithTxSpringRoutesTest extends CamelSpringTestSupport
         super.setUp();
     }
 
-    @Test
+    //@Test
     public void shouldGetMessageWithinDLQ() throws Exception {
 
         // We will extend the route of the error queue to add a mock endpoint

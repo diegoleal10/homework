@@ -15,12 +15,20 @@
             <policyMap>
                 <policyEntries>
                     <policyEntry queue=">">
+                    	<amq:deadLetterStrategy>
+                    		<amq:individualDeadLetterStrategy queuePrefix="DLQ." useQueueForQueueMessages="true"/>
+                    	</amq:deadLetterStrategy>
                     </policyEntry>
                 </policyEntries>
             </policyMap>
         </destinationPolicy>
 
         <plugins>
+        	<amq:simpleAuthenticationPlugin>
+        		<amq:users>
+        			<amq:authenticationUser username="admin" password="admin" groups="users,admins"/>
+        		</amq:users>
+        	</amq:simpleAuthenticationPlugin>
         </plugins>
 
         <transportConnectors>

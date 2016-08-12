@@ -422,11 +422,9 @@
           <url>http://repo.fusesource.com/maven2</url>
           <snapshots>
              <enabled>false</enabled>
-          <updatePolicy>daily</updatePolicy>
           </snapshots>
           <releases>
              <enabled>true</enabled>
-          <updatePolicy>daily</updatePolicy>
           </releases>
         </repository>
     </repositories>
@@ -458,11 +456,9 @@
           <url>http://repo.fusesource.com/maven2</url>
           <releases>
             <enabled>true</enabled>
-            <updatePolicy>daily</updatePolicy>
           </releases>
           <snapshots>
             <enabled>false</enabled>
-            <updatePolicy>daily</updatePolicy>
           </snapshots>
         </pluginRepository>
       </pluginRepositories>

@@ -44,17 +44,17 @@
 
     <dependencies>
         <!-- LDAP -->
-        <dependency>
-            <groupId>org.fuse.usecase4</groupId>
-            <artifactId>ldap</artifactId>
-            <version>1.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.directory.server</groupId>
-                    <artifactId>apacheds-all</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+<!--         <dependency> -->
+<!--             <groupId>org.fuse.usecase4</groupId> -->
+<!--             <artifactId>ldap</artifactId> -->
+<!--             <version>1.0</version> -->
+<!--             <exclusions> -->
+<!--                 <exclusion> -->
+<!--                     <groupId>org.apache.directory.server</groupId> -->
+<!--                     <artifactId>apacheds-all</artifactId> -->
+<!--                 </exclusion> -->
+<!--             </exclusions> -->
+<!--         </dependency> -->
 
         <!-- Camel -->
         <dependency>

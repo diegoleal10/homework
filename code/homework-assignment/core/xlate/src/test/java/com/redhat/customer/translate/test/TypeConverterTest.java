@@ -27,7 +27,7 @@ public class TypeConverterTest extends CamelSpringTestSupport {
 
 	protected Broker broker = null;
 
-	@Test
+	//@Test
 	public void testConverterRoute() throws Exception{
 		MockEndpoint mockEndpoint = getMockEndpoint("mock:convertEndpoint");
 		template.sendBody("activeMq:queue:customerconvert",getDataFromFile());
@@ -38,7 +38,7 @@ public class TypeConverterTest extends CamelSpringTestSupport {
 	
 
 	
-	@Test()
+	//@Test()
 	public void testAnotherRoute() throws Exception{
 		
 		MockEndpoint mockEndpoint = getMockEndpoint("mock:soapEndPoint");

@@ -1,29 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
        http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://activemq.apache.org/schema/core
        http://activemq.apache.org/schema/core/activemq-core.xsd">
 
-    <!-- ActiveMQ Broker -->
-    <broker brokerName="demo" xmlns="http://activemq.apache.org/schema/core">
+	<!-- ActiveMQ Broker -->
+	<broker brokerName="demo" xmlns="http://activemq.apache.org/schema/core">
+		<destinationPolicy>
+			<policyMap>
+				<policyEntries>
+					<policyEntry queue=">">
+						<amq:deadLetterStrategy>
+							<amq:individualDeadLetterStrategy
+								queuePrefix="DLQ." useQueueForQueueMessages="true" />
+						</amq:deadLetterStrategy>
+					</policyEntry>
+				</policyEntries>
+			</policyMap>
+		</destinationPolicy>
 
-        <destinationPolicy>
-            <policyMap>
-                <policyEntries>
-                    <policyEntry queue=">">
+		<plugins>
+			<plugins>
+				<!-- <jaasAuthenticationPlugin configuration="PropertiesLogin"> -->
+				<!-- <map> -->
+				<!-- <cachedLDAPAuthorizationMap -->
+				<!-- legacyGroupMapping="false" connectionURL="ldap://localhost:10389" -->
+				<!-- connectionUsername="uid=admin,ou=system" connectionPassword="secret" -->
+				<!-- queueSearchBase="ou=Queue,ou=Destination,ou=ActiveMQ,ou=system" -->
+				<!-- topicSearchBase="ou=Topic,ou=Destination,ou=ActiveMQ,ou=system" -->
+				<!-- tempSearchBase="ou=Temp,ou=Destination,ou=ActiveMQ,ou=system" -->
+				<!-- refreshInterval="20000" /> -->
+				<!-- </map> -->
+				<!-- </jaasAuthenticationPlugin> -->
+				<jaasAuthenticationPlugin configuration="LDAPLogin" />
+				<authorizationPlugin>
+					<map>
+						<cachedLDAPAuthorizationMap
+							connectionURL="ldap://localhost:33389" 
+							queueSearchBase="ou=Queue,ou=Destination,ou=ActiveMQ,ou=system"
+							topicSearchBase="ou=Topic,ou=Destination,ou=ActiveMQ,ou=system"
+							tempSearchBase="ou=Temp,ou=Destination,ou=ActiveMQ,ou=system"
+							adminPermissionGroupSearchFilter="(cn=admin)"
+							writePermissionGroupSearchFilter="(cn=write)"
+							readPermissionGroupSearchFilter="(cn=read)" 
+							legacyGroupMapping="true"
+							groupClass="org.apache.karaf.jaas.boot.principal.RolePrincipal" />
+					</map>
+				</authorizationPlugin>
+			</plugins>
+		</plugins>
 
-                    </policyEntry>
-                </policyEntries>
-            </policyMap>
-        </destinationPolicy>
-
-        <plugins>
-        </plugins>
-
-        <transportConnectors>
-        </transportConnectors>
-    </broker>
+		<transportConnectors>
+			<transportConnector name="tcp" uri="tcp://localhost:61616" />
+		</transportConnectors>
+	</broker>
 </beans>

@@ -39,7 +39,8 @@ import static org.junit.Assert.fail;
         broker.waitUntilStopped();
     }
 
-    @Test public void testFailCreateSessionNotEnoughRight() throws Exception {
+    @Test
+    public void testFailCreateSessionNotEnoughRight() throws Exception {
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory("vm://localhost");
         try {
             Connection conn = factory.createQueueConnection("cibsen", "camel");

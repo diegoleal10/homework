@@ -1,64 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:osgi="http://www.springframework.org/schema/osgi"
-       xmlns:cxf="http://camel.apache.org/schema/cxf"
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/osgi
-       http://www.springframework.org/schema/osgi/spring-osgi.xsd
-       http://camel.apache.org/schema/cxf
-       http://camel.apache.org/schema/cxf/camel-cxf-spring.xsd
-       http://camel.apache.org/schema/spring
-       http://camel.apache.org/schema/spring/camel-spring.xsd">
+	xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="        http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans.xsd        http://www.springframework.org/schema/osgi        http://www.springframework.org/schema/osgi/spring-osgi.xsd        http://camel.apache.org/schema/cxf        http://camel.apache.org/schema/cxf/camel-cxf-spring.xsd        http://camel.apache.org/schema/spring        http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-    <!-- H2 DB -->
-    <bean id="usecaseDB" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.h2.Driver"/>
-        <property name="url" value="jdbc:h2:tcp://localhost/~/usecaseDB"/>
-        <property name="username" value="sa"/>
-        <property name="password" value=""/>
-    </bean>
+	<!-- H2 DB -->
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		id="usecaseDB">
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url" value="jdbc:h2:tcp://localhost/~/usecaseDB" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
+	</bean>
 
-    <!-- SQL Component & Datasource -->
-    <bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
-        <property name="dataSource" ref="usecaseDB"/>
-    </bean>
+	<!-- SQL Component & Datasource -->
+	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource" ref="usecaseDB" />
+	</bean>
 
-    <cxf:cxfEndpoint id="customerWebService" address="http://localhost:9090/ws/customerService"
-                     serviceClass="org.fuse.usecase.service.CustomerWS"
-                     loggingFeatureEnabled="true">
-    </cxf:cxfEndpoint>
+	<cxf:cxfEndpoint address="http://localhost:9090/ws/customerService"
+		id="customerWebService" loggingFeatureEnabled="true"
+		serviceClass="org.fuse.usecase.service.CustomerWS" />
 
-    <cxf:rsServer id="customerRestService" address="http://localhost:9191/rest"
-                  serviceClass="org.fuse.usecase.service.CustomerRest"
-                  loggingFeatureEnabled="false">
-        <cxf:providers>
-            <ref bean="jsonProvider"/>
-        </cxf:providers>
-    </cxf:rsServer>
+	<cxf:rsServer address="http://localhost:9191/rest" id="customerRestService"
+		loggingFeatureEnabled="false" serviceClass="org.fuse.usecase.service.CustomerRest">
+		<cxf:providers>
+			<ref bean="jsonProvider" />
+		</cxf:providers>
+	</cxf:rsServer>
 
-    <cxf:rsClient id="customerRestServiceClient" address="http://localhost:9191/rest"
-                  loggingFeatureEnabled="false" serviceClass="org.fuse.usecase.service.CustomerRest">
-        <cxf:providers>
-            <ref bean="jsonProvider"/>
-        </cxf:providers>
-    </cxf:rsClient>
+	<cxf:rsClient address="http://localhost:9191/rest" id="customerRestServiceClient"
+		loggingFeatureEnabled="false" serviceClass="org.fuse.usecase.service.CustomerRest">
+		<cxf:providers>
+			<ref bean="jsonProvider" />
+		</cxf:providers>
+	</cxf:rsClient>
 
-    <bean id="reconcileData" class="org.fuse.usecase.AccountAggregator"/>
-    <bean id="customerWSImplBean" class="org.fuse.usecase.service.CustomerWSImpl"/>
-    <bean id="customerRestImplBean" class="org.fuse.usecase.service.CustomerRestImpl"/>
-    <bean id="processorBean" class="org.fuse.usecase.ProcessorBean"/>
+	<bean class="org.fuse.usecase.AccountAggregator" id="reconcileData" />
+	<bean class="org.fuse.usecase.service.CustomerWSImpl" id="customerWSImplBean" />
+	<bean class="org.fuse.usecase.service.CustomerRestImpl" id="customerRestImplBean" />
+	<bean class="org.fuse.usecase.ProcessorBean" id="processorBean" />
 
-    <!--  THIS PROVIDER DOESN'T WORK & RETURN ERROR 415 Unsupported Media Type
-      It can't also handle the Body : No message body reader has been found for
-      class CXF_Test.cxf_test.Book, ContentType: application/json
-      <bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider"/>
-    -->
-    <bean id="jsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
+	<!-- THIS PROVIDER DOESN'T WORK & RETURN ERROR 415 Unsupported Media Type 
+		It can't also handle the Body : No message body reader has been found for 
+		class CXF_Test.cxf_test.Book, ContentType: application/json <bean id="jsonProvider" 
+		class="org.apache.cxf.jaxrs.provider.json.JSONProvider"/> -->
+	<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"
+		id="jsonProvider" />
 
-    <camelContext trace="false" xmlns="http://camel.apache.org/schema/spring">
-        <propertyPlaceholder id="properties" location="fabric8/route.properties"/>
-    </camelContext>
+	<camelContext id="camelContext-bfcb51a6-1c57-4caa-b3f7-65bce9dc8161"
+		trace="false" xmlns="http://camel.apache.org/schema/spring">
+		<propertyPlaceholder id="properties" location="fabric8/route.properties" />
+
+		<dataFormats>
+			<json id="unmarshalAccount" library="Jackson" unmarshalTypeName="org.globex.Account" />
+		</dataFormats>
+
+		<route id="route_1">
+			<from id="_from1" uri="file:src/data/inbox?include=.*.txt&amp;noop=true" />
+			<log message="################ INICIO PROCESAMIENTO: ${date:now:yyyyMMddhhmmss}"></log>
+			<split>
+				<tokenize token="\n"></tokenize>
+				<convertBodyTo id="_convertBodyTo1" type="String" />
+				<unmarshal ref="unmarshalAccount" />
+				<log id="_log2" message="Unmarshal --> ${body.company.name}" />
+				<multicast id="_multicast1" strategyRef="reconcileData" >
+					<to id="_to1" uri="direct:callRestEndpoint" />
+					<to id="_to2" uri="cxf:bean:customerWebService" />
+				</multicast>
+				<to uri="direct:insertSQL" />
+			</split>
+			<log message="################ FIN PROCESAMIENTO: ${date:now:yyyyMMddhhmmss}"></log>
+		</route>
+
+		<route id="route_2">
+			<from uri="direct:callRestEndpoint" />
+			<log message="Before callRestEndpoint --> ${body}" />
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="CamelHTTPMethod">
+				<constant>POST</constant>
+			</setHeader>
+			<setHeader headerName="CamelHttpPath">
+				<constant>/customerservice/enrich</constant>
+			</setHeader>
+			<setHeader headerName="CamelCxfRsUsingHttpAPI">
+				<constant>True</constant>
+			</setHeader>
+			<inOut uri="cxfrs:bean:customerRestServiceClient" />
+
+			<!-- <log message="Log after callRestEndpointClient.. ${body}" /> -->
+			<bean ref="processorBean" method="convertEntityToString" />
+<!-- 			<log message="Log after Processr ${body}" /> -->
+			<unmarshal ref="unmarshalAccount" />
+<!-- 			<log message="Log after unmarshall...... ${body}" /> -->
+		</route>
+
+		<route>
+			<from uri="cxfrs:bean:customerRestService" />
+			<bean ref="customerRestImplBean" method="enrich" />
+<!-- 			<log message="Servicio expuesto para customerRestService..." /> -->
+		</route>
+
+		<!-- <route id="route_3"> -->
+		<!-- <from id="from_3" uri="direct:callWSEndpoint" /> -->
+		<!-- <log id="_log4" message="Before callWSEndpoint ${body}" /> -->
+		<!-- <inOut uri="cxf:bean:customerWebService"/> -->
+		<!-- <log message="Log after callWSEndpoint... ${body} ...###############"/> -->
+		<!-- </route> -->
+
+		<route>
+			<from uri="cxf:bean:customerWebService" />
+			<bean ref="customerWSImplBean" method="updateAccount" />
+			<log message="Servicio expuesto para customerWebService... ${body}" />
+		</route>
+
+		<route>
+			<from uri="direct:insertSQL" />
+			<log message="Inserting Account in DB: ${body}" />
+			<bean ref="processorBean" method="defineNamedParameters" />
+			<log message="After Processor Params: ${body}" />
+			<to uri="sql:insert into USECASE.T_ACCOUNT (client_id, sales_contact, company_name, company_geo, company_active, contact_first_name, 
+				contact_last_name, contact_address, contact_city, contact_state, contact_zip, contact_phone, creation_date, creation_user) 
+				values (:#CLIENT_ID, :#SALES_CONTACT, :#COMPANY_NAME, :#COMPANY_GEO, :#COMPANY_ACTIVE, :#CONTACT_FIRST_NAME, :#CONTACT_LAST_NAME, 
+				:#CONTACT_ADDRESS, :#CONTACT_CITY, :#CONTACT_STATE, :#CONTACT_ZIP, :#CONTACT_PHONE, :#CREATION_DATE, 'dleal')" />
+		</route>
+	</camelContext>
 </beans>

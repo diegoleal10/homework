@@ -9,7 +9,6 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.junit4.CamelTestSupport;
 import org.apache.camel.test.spring.CamelSpringTestSupport;
 import org.junit.Test;
 import org.springframework.context.support.AbstractXmlApplicationContext;
@@ -24,12 +23,27 @@ public class ValidateTransformationTest extends CamelSpringTestSupport {
 
     @Produce(uri = "direct:csv2json-test-input") private ProducerTemplate startEndpoint;
 
-    @Test public void transform() throws Exception {
+    public void transform() throws Exception {
+    	
+        resultEndpoint.expectedMessageCount(1);
+        
+        resultEndpoint.expectedBodiesReceived(jsonUnprettyPrint(readFile("src/data/outbox/csv-record-20160801153334793.txt")));
+        
+        startEndpoint.sendBody(readFile("src/data/inbox/customers.csv"));
+        
+        resultEndpoint.assertIsSatisfied();
     }
 
     @Override protected RouteBuilder createRouteBuilder() throws Exception {
         return new RouteBuilder() {
             public void configure() throws Exception {
+            	
+            	from("direct:csv2json-test-input")
+                .log("Before transformation:\n ${body}")
+                .to("csv2json")
+                .log("After transformation:\n ${body}")
+                .to("mock:csv2json-test-output");
+            	
             }
         };
     }

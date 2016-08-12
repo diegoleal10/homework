@@ -63,7 +63,7 @@ public class OnExceptionDLQWithTXTest extends CamelTestSupport {
         };
     }
 
-    @Test
+    //@Test
     public void shouldGetMessageWithinDLQ() throws Exception {
         template.sendBody(queueInputEndpoint, records);
 

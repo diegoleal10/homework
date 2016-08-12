@@ -68,7 +68,7 @@ public class CamelContextXmlTest extends CamelSpringTestSupport {
 		KeyValueHolder serviceHolder = new KeyValueHolder(new ActiveMQComponent(), null);
 	}
 
-	@Test
+	//@Test
 	public void testCamelRoute() throws Exception {
 	}
 
