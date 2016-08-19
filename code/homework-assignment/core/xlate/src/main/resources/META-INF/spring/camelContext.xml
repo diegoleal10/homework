@@ -1,17 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:camel="http://camel.apache.org/schema/spring"
-    xmlns:osgi="http://www.springframework.org/schema/osgi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd                http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
-    <bean class="org.apache.camel.dataformat.soap.name.ServiceInterfaceStrategy" id="serviceStrategy">
-        <constructor-arg value="com.sun.mdm.index.webservice.PersonEJB"/>
-        <constructor-arg value="true"/>
-    </bean>
-    <osgi:reference id="activeMq" interface="org.apache.camel.Component"/>
-    <bean class="com.redhat.customer.translate.RouteBuilderXlate" id="routeBuilder"/>
-    <camelContext id="camelContext-7ea4fabc-d8c2-47d6-8ba4-b8d8ce709a7f" trace="false" typeConverterStatisticsEnabled="true" xmlns="http://camel.apache.org/schema/spring">
-        <camel:dataFormats>
-            <camel:soapjaxb contextPath="com.sun.mdm.index.webservice" elementNameStrategyRef="serviceStrategy" id="soapJax"/>
-            <camel:jaxb contextPath="com.customer.app" id="personMarshaller" partClass="com.customer.app.Person"/>
-        </camel:dataFormats>
-        <route id="translate"/>
-    </camelContext>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:osgi="http://www.springframework.org/schema/osgi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd                  http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd                  http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf-spring.xsd                  http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd           http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+
+	<bean id="deadLetterQueue" class="org.apache.camel.builder.DeadLetterChannelBuilder">
+		<property name="deadLetterUri" value="activemq:queue:q.empi.transform.dlq" />
+		<property name="redeliveryPolicy" ref="redeliveryPolicy" />
+	</bean>
+
+	<bean id="redeliveryPolicy" class="org.apache.camel.processor.RedeliveryPolicy">
+		<property name="maximumRedeliveries" value="3" />
+		<property name="redeliveryDelay" value="1000" />
+	</bean>
+
+	<bean class="org.apache.camel.dataformat.soap.name.ServiceInterfaceStrategy" id="serviceStrategy">
+		<constructor-arg value="com.sun.mdm.index.webservice.PersonEJB" />
+		<constructor-arg value="true" />
+	</bean>
+
+	<bean class="org.springframework.jms.connection.JmsTransactionManager" id="jmsTransactionManager">
+		<property name="connectionFactory" ref="jmsConnectionFactory" />
+	</bean>
+
+	<bean class="org.apache.activemq.ActiveMQConnectionFactory" id="jmsConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616" />
+	</bean>
+
+	<bean class="org.apache.camel.component.jms.JmsComponent" name="activemq">
+		<property name="connectionFactory" ref="jmsConnectionFactory" />
+		<property name="transactionManager" ref="jmsTransactionManager" />
+		<property name="transacted" value="true" />
+	</bean>
+
+	<bean class="com.redhat.customer.translate.TransformToExecuteMatch" id="typeConverter" />
+
+	<camelContext id="camelContext-7ea4fabc-d8c2-47d6-8ba4-b8d8ce709a7f" trace="false" typeConverterStatisticsEnabled="true"
+			errorHandlerRef="deadLetterQueue" xmlns="http://camel.apache.org/schema/spring">
+		<dataFormats>
+			<soapjaxb contextPath="com.sun.mdm.index.webservice" elementNameStrategyRef="serviceStrategy" id="soapJax" />
+			<jaxb contextPath="com.customer.app" id="personMarshaller" partClass="com.customer.app.Person" />
+		</dataFormats>
+<!-- 		<onException> -->
+<!-- 			<exception>org.apache.camel.TypeConversionException</exception> -->
+<!-- 			<log message="Error converting Person to ExecuteMatchUpdate" /> -->
+<!-- 		</onException> -->
+		<route id="translate">
+			<from uri="activemq:queue:q.empi.deim.in" />
+			<log message="Message received in Queue: ${body}" />
+			<unmarshal ref="personMarshaller" />
+			<log message="Unmarshaled Person: ${body}" />
+			<convertBodyTo type="com.sun.mdm.index.webservice.ExecuteMatchUpdate" />
+			<log message="Converted Person to ExecuteMatchUpdate: ${body}" />
+			<marshal ref="soapJax" />
+			<to uri="activemq:queue:q.empi.nextgate.out" />
+			<log message="Message Sent: ${body}" />
+		</route>
+		<route>
+			<from uri="activemq:queue:q.empi.transform.dlq" />
+			<log message="#### Error received in DLQ: ${body}" />
+		</route>
+	</camelContext>
 </beans>

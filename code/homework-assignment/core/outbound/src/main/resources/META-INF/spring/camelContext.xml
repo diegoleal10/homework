@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:camel="http://camel.apache.org/schema/spring"
-    xmlns:osgi="http://www.springframework.org/schema/osgi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd        http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
-    <osgi:reference id="activeMq" interface="org.apache.camel.Component"/>
-    <camelContext id="outBound" trace="false" xmlns="http://camel.apache.org/schema/spring"/>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:osgi="http://www.springframework.org/schema/osgi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd                  http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd                  http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf-spring.xsd                  http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd           http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+
+	<bean class="org.apache.camel.dataformat.soap.name.ServiceInterfaceStrategy" id="serviceStrategy">
+		<constructor-arg value="com.sun.mdm.index.webservice.PersonEJB" />
+		<constructor-arg value="true" />
+	</bean>
+
+	<bean class="org.springframework.jms.connection.JmsTransactionManager" id="jmsTransactionManager">
+		<property name="connectionFactory" ref="jmsConnectionFactory" />
+	</bean>
+
+	<bean class="org.apache.activemq.ActiveMQConnectionFactory" id="jmsConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616" />
+	</bean>
+
+	<bean class="org.apache.camel.component.jms.JmsComponent" name="activemq">
+		<property name="connectionFactory" ref="jmsConnectionFactory" />
+		<property name="transactionManager" ref="jmsTransactionManager" />
+		<property name="transacted" value="true" />
+	</bean>
+
+	<cxf:cxfEndpoint id="clientWS" address="http://127.0.0.1:8181/cxf/PersonEJBService/PersonEJB" 
+		wsdlURL="http://127.0.0.1:8181/cxf/PersonEJBService/PersonEJB?wsdl"
+		serviceClass="com.sun.mdm.index.webservice.PersonEJB">
+		<cxf:properties>
+			<entry key="dataFormat" value="MESSAGE"/>
+		</cxf:properties>
+	</cxf:cxfEndpoint>
+
+	<camelContext id="outBound" trace="false" xmlns="http://camel.apache.org/schema/spring">
+		<dataFormats>
+			<soapjaxb contextPath="com.sun.mdm.index.webservice" elementNameStrategyRef="serviceStrategy" id="soapJax" />
+		</dataFormats>
+		<route>
+			<from uri="activemq:queue:q.empi.nextgate.out" />
+			<log message="Received Message: ${body}" />
+<!-- 			<unmarshal ref="soapJax" /> -->
+<!-- 			<log message="Object marshaled: ${body}" /> -->
+			<to uri="cxf:bean:clientWS" />
+			<log message="WS Response: ${body}" />
+		</route>
+	</camelContext>
 </beans>
